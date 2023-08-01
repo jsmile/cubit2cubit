@@ -9,8 +9,10 @@ import '/cubits/color/color_cubit.dart';
 part 'counter_state.dart';
 
 class CounterCubit extends Cubit<CounterState> {
-  int increasedNumber = 1;
-  final ColorCubit colorCubit;
+  int increasedNumber = 0; // 상태를 변화시키는데 사용할 변수 선언.
+
+  final ColorCubit colorCubit; // 참조할 colorCubit 을 선언.
+  // colorCubit 의 state 를 구독할 subscription 선언.
   late final StreamSubscription<ColorState> colorSubscription;
 
   // 참조하는 cubit 에서 참조할 state의 cubit 을 생성자의 param 으로 받아와서 서로 연결시킴.
@@ -36,6 +38,7 @@ class CounterCubit extends Cubit<CounterState> {
     return super.close();
   }
 
+  // 상태를 변화시키는(emit) 메서드 정의
   void changeCounter() {
     emit(state.copyWith(counter: state.counter + increasedNumber));
   }

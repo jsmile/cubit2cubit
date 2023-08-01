@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       // ColorBlocProvider -> CounterBlocProvider 순서로 생성.
       providers: [
+        // 사용될 Cubit 들을 생성.
         BlocProvider<ColorCubit>(
           // create: (context) => ColorCubit(),
           create: (colorContext) => ColorCubit(),
@@ -45,7 +46,9 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(233, 0, 0, 0.8),
+      // backgroundColor: const Color.fromRGBO(233, 0, 0, 0.8),
+      // backgroundColor: BlocProvider.of<ColorCubit>( context ).state.color,
+      backgroundColor: context.watch<ColorCubit>().state.color,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
@@ -59,17 +62,27 @@ class MyHomePage extends StatelessWidget {
                 'Change Color',
                 style: TextStyle(fontSize: 24.0),
               ),
-              onPressed: () {},
+              onPressed: () {
+                // BlocProvider.of<ColorCubit>(context).changeColor();
+                context.read<ColorCubit>().changeColor();
+              },
             ),
             const SizedBox(height: 20.0),
-            const Text(
-              '0',
-              style: TextStyle(fontSize: 52.0, color: Colors.white),
+            Text(
+              // '${BlocProvider.of<CounterCubit>(context).state.counter}',
+              '${context.watch<CounterCubit>().state.counter}',
+              style: TextStyle(
+                fontSize: 52.0,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
               child: const Text('Increment Counter'),
-              onPressed: () {},
+              onPressed: () {
+                // BlocProvider.of<CounterCubit>(context).changeCounter();
+                context.read<CounterCubit>().changeCounter();
+              },
             ),
           ],
         ),
