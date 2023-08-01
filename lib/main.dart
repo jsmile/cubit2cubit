@@ -13,18 +13,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ColorCubit>(
-      create: (context) => ColorCubit(),
-      child: BlocProvider<CounterCubit>(
-        create: (context) =>
-            CounterCubit(colorCubit: context.read<ColorCubit>()),
-        child: MaterialApp(
-          title: 'Flutter Cubit to Cubit',
-          theme: ThemeData(
-            useMaterial3: true,
-          ),
-          home: const MyHomePage(title: 'Cubit to Cubit Home Page'),
+    return MultiBlocProvider(
+      // ColorBlocProvider -> CounterBlocProvider 순서로 생성.
+      providers: [
+        BlocProvider<ColorCubit>(
+          // create: (context) => ColorCubit(),
+          create: (colorContext) => ColorCubit(),
         ),
+        BlocProvider<CounterCubit>(
+          // create: (context) =>
+          create: (counterContext) =>
+              CounterCubit(colorCubit: counterContext.read<ColorCubit>()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Cubit to Cubit',
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'Cubit to Cubit Home Page'),
       ),
     );
   }
